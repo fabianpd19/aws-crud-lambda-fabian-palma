@@ -1,0 +1,63 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: ufaespe
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: apptask
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: AppTask
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:us-east-1:599841538632:table/taskTable
+
+functions:
+  hello:
+    handler: src/handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+  crearTask:
+    handler: src/agregarTask.agregarTask
+    events:
+      - httpApi:
+          path: /tarea
+          method: post
+
+  mostrarTask:
+    handler: src/agregarTask.obtenerTask
+    events:
+      - httpApi:
+          path: /tarea
+          method: get
+
+  obtenerTask:
+    handler: src/obtenerTask.obtenerTask
+    events:
+      - httpApi:
+          path: /tarea/{id}
+          method: get
+          
+resources: # CloudFormation template syntax from here on.
+  Resources:
+    taskTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: taskTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+
+
+
+
+          
