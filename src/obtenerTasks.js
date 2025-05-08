@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+
 exports.obtenerTasks = async (event) => {
   const dynamoDB = new AWS.DynamoDB.DocumentClient();
   const result = await dynamoDB

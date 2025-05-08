@@ -13,6 +13,7 @@ exports.agregarTask = async (event) => {
     titulo,
     descripcion,
     fechaCreacion,
+    estado: false,
   };
 
   await dynamoDB
